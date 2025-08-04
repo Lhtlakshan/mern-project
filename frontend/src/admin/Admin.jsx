@@ -1,26 +1,40 @@
 import React from "react";
 import { Link, Routes, Route } from "react-router-dom";
+import Products from "./Products";
+import AddProducts from "./AddProducts";
 
 const Admin = () => {
   return (
-    <>
-      <div>
-        <div>Admin is back</div>
-        <Link to="/admin/product" className="bg-blue-500 w-[20x] h-[20px]">
-          Admin product
+    <div className="flex flex-row w-full h-full">
+      <div className="flex flex-col w-[20%] h-screen bg-gray-400 p-4 items-start text-lg m-2 rounded-[10px] text-black fixed">
+        <Link
+          to="/admin/product"
+          className="w-auto h-[40px] text-white m-2 ml-4 rounded"
+        >
+          products
         </Link>
-        <Link to="/admin/customer" className="bg-blue-300 w-[20x] h-[20px]">
-          Admin customer
+        <Link
+          to="/admin/customer"
+          className="w-auto h-[40px] text-white m-2 ml-4 rounded"
+        >
+         customers
         </Link>
-
-        <div>
-          <Routes path="/*">
-            <Route path="/product" element={<h1>Admin products</h1>} />
-            <Route path="/customer" element={<h1>Customer</h1>} />
-          </Routes>
-        </div>
+        <Link
+          to="/admin/product/add"
+          className="w-auto h-[40px] text-white m-2 ml-4 rounded"
+        >
+          Add products
+        </Link>
       </div>
-    </>
+
+      <div className="flex flex-col ml-[20%] w-[100%] items-center justify-content-center h-full p-4">
+        <Routes>
+          <Route path="product" element={<Products />} />
+          <Route path="product/add" element={<AddProducts />} />
+          <Route path="customer" element={<h1>Customer</h1>} />
+        </Routes>
+      </div>
+    </div>
   );
 };
 

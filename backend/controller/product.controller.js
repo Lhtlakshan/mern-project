@@ -1,14 +1,13 @@
 import Product from "../models/product.js";
 
 export const addProduct = (req, res) => {
-  // if (req.user.role != "admin") {
-  //   res.status(403).json({
-  //     message: "You cannot add a product...",
-  //   });
-  //   return;
-  // }
+  if (req.user.role != "admin") {
+    res.status(403).json({
+      message: "You cannot add a product...",
+    });
+    return;
+  } 
   const product = new Product(req.body);
-
   product
     .save()
     .then(() => {

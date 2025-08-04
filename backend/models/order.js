@@ -30,7 +30,7 @@ const orderSchema = mongoose.Schema({
   },
   phoneNo: {
     type: String,
-    required :true
+    required: true
   },
 
   billItems :{
@@ -43,10 +43,10 @@ const orderSchema = mongoose.Schema({
             price : Number
         }
     ],
-    required : true
+    required: true
   }
 });
 
-const Order = mongoose.model("order" , orderSchema);
+const Order = mongoose.model("order", orderSchema);
 
 export default Order;

@@ -33,7 +33,7 @@ const UserSchema = mongoose.Schema({
     required : true,
     default : false
   } , 
-
+  
   isEmailVeriified :{
     type : Boolean,
     required : true,
@@ -43,3 +43,4 @@ const UserSchema = mongoose.Schema({
 
 const User = mongoose.model("users", UserSchema);
 export default User;
+

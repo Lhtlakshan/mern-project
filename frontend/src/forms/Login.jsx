@@ -1,30 +1,38 @@
-import axios from 'axios';
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+import React, { useState } from "react";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
-  const[email, setEmail] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  let handleLogin = () => {
-    axios
-      .post(import.meta.env.VITE_BACKEND_URL + "/api/user/login", {
-        email: email,
-        password: password,
-      })
-      .then((res) => {
-        console.log(res.data);
-        localStorage.setItem("token" , res.data.token);
-        const user = res.data.user;
-        if(user.role == "admin"){
-          navigate("/admin");
-        }else{
-          navigate("/")
+  
+  let handleLogin = async () => {
+    try {
+      const res = await axios.post(
+        import.meta.env.VITE_BACKEND_URL + "/api/user/login",
+        {
+          email: email,
+          password: password,
         }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      );
 
+      localStorage.setItem("token", res.data.token);
+      
+      const user = res.data.user;
+      console.log(res.data.message);
+
+      if (user.role == "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
+
+      toast.success("Login successful...");
+    } catch (err) {
+      console.log(err);
+      toast.error("Login failed " + err.message);
+    }
   };
   return (
     <div className="bg-[url('./assets/lap.jpg')] bg-cover bg-fixed bg-no-repeat h-screen w-full flex items-center justify-center">
@@ -33,21 +41,17 @@ const Login = () => {
         <div className="bg-white/60 h-[80%] w-[50%] m-10 rounded-3xl flex flex-col items-center">
           <h1 className="mt-10 mb-6 text-4xl font-bold">Login</h1>
           <input
-          onChange={
-            (e)=>{
+            onChange={(e) => {
               setEmail(e.target.value);
-            }
-          }
+            }}
             type="text"
             className="w-[75%] h-10 border-1 rounded-lg m-5 p-2.5 focus:border-blue-500 border-gray-400"
             placeholder="Enter username"
           />
           <input
-          onChange={
-            (e)=>{
+            onChange={(e) => {
               setPassword(e.target.value);
-            }
-          }
+            }}
             type="password"
             className="w-[75%] h-10 border-1 rounded-lg p-2.5 focus:border-blue-500 border-gray-400"
             placeholder="Enter password"
@@ -64,6 +68,6 @@ const Login = () => {
       </div>
     </div>
   );
-}
+};
 
-export default Login
+export default Login;

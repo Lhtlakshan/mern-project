@@ -2,4 +2,5 @@ event loop is avoid the asynchronous process in js
 when multiple users log to the systems
 
 
-Js has a run time model based on an event loop , which is responsible for executing the code , collecting and processing event , and executing queued sub tasks
+Js has a run time model based on an event loop , which is responsible for executing the code,
+collecting and processing event , and executing queued sub tasks
