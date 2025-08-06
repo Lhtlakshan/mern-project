@@ -1,7 +1,7 @@
-import React from "react";
+import { RiDeleteBin5Line } from "react-icons/ri";
+import { FiEdit3 } from "react-icons/fi";
 
-const ProductCard = ({ name, price, quantity }) => {
-
+const ProductCard = ({ name, price, quantity, onDelete, onUpdate }) => {
   return (
     <div className="p-8 max-w-lg border border-indigo-300 rounded-2xl hover:shadow-xl hover:shadow-indigo-50 flex flex-col items-center">
       <img
@@ -18,14 +18,16 @@ const ProductCard = ({ name, price, quantity }) => {
         <p className="text-gray-600 mb-3">
           Quantity: <span className="font-medium text-black">{quantity}</span>
         </p>
-        <div className="mt-5">
-          <button
-            type="button"
-            className="inline-flex items-center rounded-md border border-transparent bg-gray-800 px-4 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-gray-900 cursor-pointer"
-          >
-            Add to cart
-          </button>
-        </div>
+      </div>
+      <div className="flex ">
+        <RiDeleteBin5Line
+          className="text-3xl m-3 text-red-800 hover:text-red-600 cursor-pointer"
+          onClick={onDelete}
+        />
+        <FiEdit3
+          className="text-3xl m-3 text-blue-900 hover:text-blue-700 cursor-pointer"
+          onClick={onUpdate}
+        />
       </div>
     </div>
   );

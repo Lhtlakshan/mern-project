@@ -1,25 +1,55 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
+import toast from "react-hot-toast";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/api/products`
-        );
-        console.log(res.data);
-        setProducts(res.data);
-      } catch (error) {
-        console.error("Failed to fetch products:", error);
-      }
-    };
+    if (!loading) {
+      axios
+        .get(`${import.meta.env.VITE_BACKEND_URL}/api/products`)
+        .then((res) => {
+          setProducts(res.data);
+          setLoading(true);
+        });
+    }
+  }, [loading]);
 
-    fetchProducts();
-  }, []);
+  const deleteFunction = async (id) => {
+    const token = localStorage.getItem("token");
+    if (token == null) {
+      toast.error("Please login to delete a product");
+      return;
+    }
+
+    try {
+      const response = await axios.delete(
+        `${import.meta.env.VITE_BACKEND_URL}/api/products/${id}`,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+
+      // Check if backend confirms deletion (depends on your backend API)
+      if (response.status === 200 || response.status === 204) {
+        setLoading(false);
+        toast.success("Product deleted successfully");
+      } else {
+        toast.error("Failed to delete product");
+      }
+    } catch (err) {
+      toast.error("Product cannot be deleted");
+      return;
+    }
+  };
+  
 
   return (
     <>
@@ -33,6 +63,12 @@ const Products = () => {
             name={product.name}
             price={product.price}
             quantity={product.quantity}
+            onDelete={() => deleteFunction(product.productId)}
+            onUpdate={() => {
+              navigate("/admin/product/edit", {
+                state: product,
+              });
+            }}
           />
         ))}
       </div>

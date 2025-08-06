@@ -1,16 +1,28 @@
 import axios from "axios";
-import React, { useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { uploadImage } from "../util/MediaUpload";
 
-const AddProducts = () => {
-  const [productId, setProductId] = useState("");
-  const [name, setName] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [price, setPrice] = useState("");
+const EditProduct = () => {
+
+   const locationData = useLocation();
+   const navigate = useNavigate();
+
+   if (locationData.state == null) {
+     toast.error("please select product to edit");
+     navigate("/admin/products");
+     return;
+   }
+
+   console.log(locationData.state);
+   
+
+  const [productId, setProductId] = useState(locationData.state.productId);
+  const [name, setName] = useState(locationData.state.name);
+  const [quantity, setQuantity] = useState(locationData.state.quantity);
+  const [price, setPrice] = useState(locationData.state.price);
   const [images, setImages] = useState([]);
-  const navigate = useNavigate();
 
   const handleSubmit = async () => {
 
@@ -54,7 +66,7 @@ const AddProducts = () => {
   return (
     <div className="flex flex-col justify-content-center items-center">
       <div className="flex flex-col items-center justify-content-center shadow-xl w-[500px] pt-5 h-[500px] mt-5 rounded-[20px]">
-        <h1 className="m-5 text-3xl font-bold text-black">Add Product</h1>
+        <h1 className="m-5 text-3xl font-bold text-black">Update Product</h1>
         <input
           type="text"
           placeholder="Product Id"
@@ -63,6 +75,7 @@ const AddProducts = () => {
           onChange={(e) => {
             setProductId(e.target.value);
           }}
+          disabled
         />
         <input
           type="text"
@@ -110,7 +123,7 @@ const AddProducts = () => {
             className="cursor-pointer w-[48%] bg-blue-800 h-10 border-0 rounded-[5px] hover:bg-blue-600"
             onClick={handleSubmit}
           >
-            Add
+            Update
           </button>
           <button
             type="button"
@@ -124,32 +137,4 @@ const AddProducts = () => {
   );
 };
 
-export default AddProducts;
-
-//     productId:{
-//       type: String,
-//       required: true,
-//       unique: true
-//     },
-//     name: {
-//       type: String,
-//       required: [true, "Please enter the product name"],
-//     },
-
-//     quantity: {
-//       type: Number,
-//       required: true,
-//       default: 0,
-//     },
-
-//     price: {
-//       type: Number,
-//       required: true,
-//       default: 0,
-//     },
-
-//     image: {
-//       type: [String],
-//       required: false,
-//     },
-//   }
+export default EditProduct;

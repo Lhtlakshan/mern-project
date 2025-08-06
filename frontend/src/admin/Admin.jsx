@@ -2,6 +2,7 @@ import React from "react";
 import { Link, Routes, Route } from "react-router-dom";
 import Products from "./Products";
 import AddProducts from "./AddProducts";
+import EditProduct from "./EditProduct";
 
 const Admin = () => {
   return (
@@ -17,7 +18,7 @@ const Admin = () => {
           to="/admin/customer"
           className="w-auto h-[40px] text-white m-2 ml-4 rounded"
         >
-         customers
+          customers
         </Link>
         <Link
           to="/admin/product/add"
@@ -31,6 +32,7 @@ const Admin = () => {
         <Routes>
           <Route path="product" element={<Products />} />
           <Route path="product/add" element={<AddProducts />} />
+          <Route path="product/edit" element={<EditProduct/>} />
           <Route path="customer" element={<h1>Customer</h1>} />
         </Routes>
       </div>
