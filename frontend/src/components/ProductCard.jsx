@@ -1,11 +1,11 @@
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { FiEdit3 } from "react-icons/fi";
 
-const ProductCard = ({ name, price, quantity, onDelete, onUpdate }) => {
+const ProductCard = ({ name, price, quantity, image, onDelete, onUpdate }) => {
   return (
     <div className="p-8 max-w-lg border border-indigo-300 rounded-2xl hover:shadow-xl hover:shadow-indigo-50 flex flex-col items-center">
       <img
-        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQw5ULId_x7tI82nuqhnkJb61KFgSsbVCsicw&s"
+        src={image}
         alt="Product"
         className="shadow rounded-lg overflow-hidden border object-cover w-full h-64"
       />

@@ -1,0 +1,24 @@
+# Dependency folders
+node_modules
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# Production build output
+build
+dist
+
+# Docker files
+Dockerfile
+.dockerignore
+
+# Git & configs
+.git
+.gitignore
+
+# OS / IDE files
+*.md
+*.swp
+.DS_Store
+.vscode

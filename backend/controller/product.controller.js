@@ -1,51 +1,57 @@
 import Product from "../models/product.js";
 
-export const addProduct = (req, res) => {
-  if (req.user.role != "admin") {
-    res.status(403).json({
-      message: "You cannot add a product...",
-    });
-    return;
-  } 
+export const addProduct = async (req, res) => {
+  // if (req.user.role != "admin") {
+  //     console.log(req.user);
+
+  //   res.status(403).json({
+  //     message: "You cannot add a product...",
+  //   });
+  //   return;
+
+  // }
   const product = new Product(req.body);
-  product
-    .save()
-    .then(() => {
-      res.status(200).json({
-        message: "Product saved",
-      });
-    })
-    .catch((err) => {
-      res.json({
-        message: "Product was not saved",
-      });
+
+  try {
+    await product.save();
+    res.status(200).json({
+      message: "Product saved",
     });
-    
+  } catch (err) {
+    res.json({
+      message: "Product was not saved",
+    });
+  }
 };
 
 export const getAllProducts = async (req, res) => {
-  Product.find().then((products)=>{
-    res.status(200).json(products);
-  }
-).catch((err)=>{
-  res.status(500).json({message : err.message})
-})
+  await Product.find()
+    .then((products) => {
+      res.status(200).json(products);
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+    });
 };
 
 export const getProductById = async (req, res) => {
-  const id = req.params.id;
+  const id = req.params.productId;
 
-  Product.findOne({productId : id}).then((product)=>{
+  try {
+    const product = await Product.findOne({ productId: id });
+    if (product == null) {
+      res.status(404).json({ message: "Product not found" });
+    }
+
     res.status(200).json(product);
-  }).catch((err)=>{
-    res.status(500).json({message : err.message});
-  })
-
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
 };
 
 export const updateProduct = async (req, res) => {
   const productId = req.params.productId;
-  
+
   Product.findOneAndUpdate({ productId: productId }, req.body)
     .then((product) => {
       res.status(200).json({
@@ -61,14 +67,16 @@ export const updateProduct = async (req, res) => {
 export const deleteProduct = async (req, res) => {
   const productId = req.params.productId;
 
-  Product.findOneAndDelete({productId :productId}).then((product)=>{
-    res.status(200).json({
-      message : "Product deleted",
-      Data : product
+  Product.findOneAndDelete({ productId: productId })
+    .then((product) => {
+      res.status(200).json({
+        message: "Product deleted",
+        Data: product,
+      });
     })
-  }).catch((err)=>{
-    res.status(500).json({
-      message: err.message
-    })
-  })
+    .catch((err) => {
+      res.status(500).json({
+        message: err.message,
+      });
+    });
 };

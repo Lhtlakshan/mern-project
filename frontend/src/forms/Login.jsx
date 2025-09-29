@@ -6,28 +6,36 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  
+
   let handleLogin = async () => {
+
+    if (email == "" && password == "") {
+      toast.error("email and password should not be empty");
+      return;
+    }
+    
     try {
       const res = await axios.post(
         import.meta.env.VITE_BACKEND_URL + "/api/user/login",
         {
-          email: email,
+          username: email,
           password: password,
         }
       );
 
+      console.log(res);
+
       localStorage.setItem("token", res.data.token);
-      
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+
       const user = res.data.user;
       console.log(res.data.message);
 
       if (user.role == "admin") {
         navigate("/admin");
       } else {
-        navigate("/");
+        navigate("/customer/products");
       }
-
       toast.success("Login successful...");
     } catch (err) {
       console.log(err);
@@ -47,6 +55,7 @@ const Login = () => {
             type="text"
             className="w-[75%] h-10 border-1 rounded-lg m-5 p-2.5 focus:border-blue-500 border-gray-400"
             placeholder="Enter username"
+            required
           />
           <input
             onChange={(e) => {
@@ -55,11 +64,12 @@ const Login = () => {
             type="password"
             className="w-[75%] h-10 border-1 rounded-lg p-2.5 focus:border-blue-500 border-gray-400"
             placeholder="Enter password"
+            required
           />
 
           <button
             type="submit"
-            className="w-[75%] h-10 bg-blue-700 text-white rounded-lg m-5 hover:bg-blue-600 curser-pointer"
+            className="w-[75%] h-10 bg-blue-700 text-white rounded-lg m-5 hover:bg-blue-600 curser-pointer focus:bg-blue-800 active:bg-blue-900"
             onClick={handleLogin}
           >
             Login

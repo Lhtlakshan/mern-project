@@ -42,12 +42,15 @@ export const saveUser = (req, res) => {
 };
 
 export const loginUser = (req, res) => {
-  const email = req.body.email;
+  const email = req.body.username;
   const password = req.body.password;
-
+  
   User.findOne({
     email: email,
   }).then((user) => {
+    
+    console.log(user);
+    
     if (user != null) {
       const isPasswordCorrect = bcrypt.compareSync(password, user.password);
 

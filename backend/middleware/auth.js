@@ -2,21 +2,21 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
-const verifyJwt = (req,res,next)=>{
+const verifyJwt = (req, res, next) => {
+  try {
     const header = req.header("Authorization");
-    if(header != null){
-      const token = header.replace("Bearer ","");
-      jwt.verify(token, process.env.JWT_KEY , (err,decoded)=>{
-        console.log(decoded);
-
-        if(decoded != null){
-          req.user = decoded;
-        }
-        
-      });
+    if (!header) {
+      return res.status(401).json({ message: "Authorization header missing" });
     }
-    next()
-    
+
+    const token = header.replace("Bearer ", "");
+    const decoded = jwt.verify(token, process.env.JWT_KEY); // synchronous verification
+
+    req.user = decoded; // attach decoded data to request
+    next();
+  } catch (err) {
+    return res.status(401).json({ message: "Invalid or expired token" });
+  }
 };
 
 export default verifyJwt;

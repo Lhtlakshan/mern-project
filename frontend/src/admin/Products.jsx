@@ -27,6 +27,14 @@ const Products = () => {
       return;
     }
 
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this product?"
+    );
+    if (!confirmDelete) {
+      toast.success("Product deletion cancelled");
+      return;
+    }
+
     try {
       const response = await axios.delete(
         `${import.meta.env.VITE_BACKEND_URL}/api/products/${id}`,
@@ -41,8 +49,10 @@ const Products = () => {
       if (response.status === 200 || response.status === 204) {
         setLoading(false);
         toast.success("Product deleted successfully");
+        return;
       } else {
         toast.error("Failed to delete product");
+        return;
       }
     } catch (err) {
       toast.error("Product cannot be deleted");
@@ -63,6 +73,7 @@ const Products = () => {
             name={product.name}
             price={product.price}
             quantity={product.quantity}
+            image={product.image[0]}
             onDelete={() => deleteFunction(product.productId)}
             onUpdate={() => {
               navigate("/admin/product/edit", {

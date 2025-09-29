@@ -5,18 +5,16 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { uploadImage } from "../util/MediaUpload";
 
 const EditProduct = () => {
+  const locationData = useLocation();
+  const navigate = useNavigate();
 
-   const locationData = useLocation();
-   const navigate = useNavigate();
+  if (locationData.state == null) {
+    toast.error("please select product to edit");
+    navigate("/admin/products");
+    return;
+  }
 
-   if (locationData.state == null) {
-     toast.error("please select product to edit");
-     navigate("/admin/products");
-     return;
-   }
-
-   console.log(locationData.state);
-   
+  console.log(locationData.state);
 
   const [productId, setProductId] = useState(locationData.state.productId);
   const [name, setName] = useState(locationData.state.name);
@@ -25,42 +23,43 @@ const EditProduct = () => {
   const [images, setImages] = useState([]);
 
   const handleSubmit = async () => {
-
     const promiseArray = [];
     for (let i = 0; i < images.length; i++) {
       const promise = uploadImage(images[i]);
       promiseArray[i] = promise;
     }
 
-    try{
-    const results = await Promise.all(promiseArray);
+    try {
+      const results = await Promise.all(promiseArray);
 
-    console.log(productId);
+      console.log(productId);
 
-    const product = {
+      const product = {
         productId: productId,
         name: name,
         quantity: quantity,
         price: price,
-        image: results
-    }
+        image: results,
+      };
 
-    const token = localStorage.getItem("token");
-    toast.success("Form submitted")
-    console.log(token);
+      const token = localStorage.getItem("token");
+      console.log(token);
 
-    const post = await axios.post(import.meta.env.VITE_BACKEND_URL + "/api/products/", product, {
-        headers:{
-            "Authorization": "Bearer " + token
+      const post = await axios.put(
+        `${import.meta.env.VITE_BACKEND_URL}` + `/api/products/` + productId,
+        product,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
         }
-    })
-    toast.success("Product added successfully");
-    navigate("/admin/product");
-
-  }catch(err){
-    console.log(err);
-    toast.error("File upload failed")
-  }
+      );
+      toast.success("Product updated successfully");
+      navigate("/admin/products");
+    } catch (err) {
+      console.log(err);
+      toast.error("Cannot update the product");
+    }
   };
 
   return (
@@ -110,11 +109,9 @@ const EditProduct = () => {
           // value={image}
           className="border-1 rounded-[10px] h-10 w-80 p-2 m-2"
           multiple
-          onChange={
-              (e)=>{
-                  setImages(e.target.files);
-              }
-          }
+          onChange={(e) => {
+            setImages(e.target.files);
+          }}
         />
 
         <div className="text-white w-80 flex flex-row justify-between mt-4 items-center">

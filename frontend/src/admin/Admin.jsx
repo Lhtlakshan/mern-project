@@ -9,7 +9,7 @@ const Admin = () => {
     <div className="flex flex-row w-full h-full">
       <div className="flex flex-col w-[20%] h-screen bg-gray-400 p-4 items-start text-lg m-2 rounded-[10px] text-black fixed">
         <Link
-          to="/admin/product"
+          to="/admin/products"
           className="w-auto h-[40px] text-white m-2 ml-4 rounded"
         >
           products
@@ -30,7 +30,7 @@ const Admin = () => {
 
       <div className="flex flex-col ml-[20%] w-[100%] items-center justify-content-center h-full p-4">
         <Routes>
-          <Route path="product" element={<Products />} />
+          <Route path="products" element={<Products />} />
           <Route path="product/add" element={<AddProducts />} />
           <Route path="product/edit" element={<EditProduct/>} />
           <Route path="customer" element={<h1>Customer</h1>} />
