@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const orderSchema = mongoose.Schema({
+const orderSchema = new mongoose.Schema({
   orderId: {
     type: String,
     required: true,
@@ -9,7 +9,7 @@ const orderSchema = mongoose.Schema({
   date: {
     type: Date,
     required: true,
-    default: Date.now,
+    default: () => Date.now(),
   },
   email: {
     type: String,
@@ -25,28 +25,31 @@ const orderSchema = mongoose.Schema({
   },
   status: {
     type: String,
-    required: true,
+    enum: ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"],
     default: "Pending",
   },
   phoneNo: {
     type: String,
-    required: true
+    required: true,
   },
-
-  billItems :{
-    type : [
-        {
-            productId :String,
-            productName : String,
-            image : String,
-            quantity  :Number,
-            price : Number
-        }
+  billItems: {
+    type: [
+      {
+        productId: { type: String, required: true },
+        productName: { type: String, required: true },
+        quantity: { type: Number, required: true, min: 1 },
+        price: { type: Number, required: true, min: 0 },
+        total: { type: Number, required: true },
+      },
     ],
-    required: true
-  }
+    required: true,
+  },
+  total: {
+    type: Number,
+    required: true,
+  },
 });
 
-const Order = mongoose.model("order", orderSchema);
+const Order = mongoose.model("Order", orderSchema);
 
 export default Order;

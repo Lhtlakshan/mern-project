@@ -6,7 +6,7 @@ const Header = () => {
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
   const name = user?.name || user?.email; // fallback if name not available
-
+  
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");

@@ -1,8 +1,9 @@
 import express from "express";
-import { createOrder } from "../controller/order.controller.js";
+import { placeOrder } from "../controller/order.controller.js";
+import verifyJwt from "../middleware/auth.js";
 
 const orderRouter = express.Router();
 
-orderRouter.post("/",createOrder)
+orderRouter.post("/", verifyJwt, placeOrder);
 
 export default orderRouter;

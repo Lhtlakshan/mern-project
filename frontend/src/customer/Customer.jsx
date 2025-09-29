@@ -3,6 +3,7 @@ import Products from "./Products";
 import { Routes, Route } from "react-router-dom";
 import ShoppingCart from "./ShoppingCart";
 import Header from "../components/Header";
+import Checkout from "./Checkout";
 
 const Customer = () => {
   return (
@@ -14,6 +15,7 @@ const Customer = () => {
           <Route path="products" element={<Products />} />
           <Route path="cart" element={<ShoppingCart />} />
           <Route path="product-overview/:id" element={<ProductOverview />} />
+          <Route path="checkout" element={<Checkout />} />
         </Routes>
       </div>
     </div>
