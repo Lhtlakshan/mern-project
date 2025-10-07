@@ -57,7 +57,7 @@ export const placeOrder = async (req, res) => {
     const order = new Order(orderData);
     await order.save();
 
-    res.status(200).json({
+    res.status(201).json({
       message: "Order placed successfully",
       orderId: order.orderId,
       total: orderData.total,
@@ -67,5 +67,32 @@ export const placeOrder = async (req, res) => {
     res
       .status(500)
       .json({ message: "Order was not placed", error: err.message });
+  }
+};
+
+export const getOrders = async (req, res) => {
+  try {
+    if (req.user.role === "admin") {
+      const orders = await Order.find();
+
+      res.json({
+        orders: orders,
+        message: "All orders",
+      });
+    } else {
+      const orders = await Order.find({
+        email: req.user.email,
+      });
+
+      res.json({
+        orders: orders,
+        message: "Your all orders"
+      })
+    }
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ message: "Cannot be found", error: err.message });
   }
 };

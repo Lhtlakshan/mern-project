@@ -5,24 +5,27 @@ import Login from "./forms/Login";
 import Admin from "./admin/Admin";
 import { Toaster } from "react-hot-toast";
 import Customer from "./customer/Customer";
-import ProductOverview from "./customer/ProductOverview";
+import Orders from "./components/Orders";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 function App() {
   return (
-    <>
-      <BrowserRouter>
-        <Toaster position="top-right" />
-        <Routes path="/*">
-          <Route path="/" element={<h1>Home</h1>} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<h1>Signup</h1>} />
-          <Route path="/admin/*" element={<Admin />} />
-          <Route path="/customer/*" element={<Customer />} />
-          <Route path="/products/*" element={<h1>Products</h1>} />
-          <Route path="/*" element={<h1>404 Not found</h1>} />
-        </Routes>
-      </BrowserRouter>
-    </>
+
+      <GoogleOAuthProvider clientId="163482525115-akivo60nnq7nbeg3hk9bgiupakf3svhr.apps.googleusercontent.com">
+        <BrowserRouter>
+          <Toaster position="top-right" />
+          <Routes path="/*">
+            <Route path="/" element={<h1>Home</h1>} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<h1>Signup</h1>} />
+            <Route path="/admin/*" element={<Admin />} />
+            <Route path="/customer/*" element={<Customer />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/*" element={<h1>404 Not found</h1>} />
+          </Routes>
+        </BrowserRouter>
+      </GoogleOAuthProvider>
+
   );
 }
 

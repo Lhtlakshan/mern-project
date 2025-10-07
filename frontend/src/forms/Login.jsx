@@ -1,19 +1,50 @@
+import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
+import { GrGoogle } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  let handleLogin = async () => {
+  const loginWithGoogle = useGoogleLogin({
+    onSuccess: async (credentialResponse) => {
+      const res = await axios.post(import.meta.env.VITE_BACKEND_URL+ "/api/user/google",{
+        accessToken : credentialResponse.access_token
+      })
 
+      console.log(res);
+      
+      localStorage.setItem("token", res.data.token);
+
+      console.log(res.data);
+      
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+
+      const user = res.data.user;
+      console.log(res.data.message);
+
+      if (user.role == "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/customer/products");
+      }
+      toast.success("Login successful...");
+      
+    },
+    onError: () => {
+      console.log("Login Failed");
+    },
+  });
+
+  let handleLogin = async () => {
     if (email == "" && password == "") {
       toast.error("email and password should not be empty");
       return;
     }
-    
+
     try {
       const res = await axios.post(
         import.meta.env.VITE_BACKEND_URL + "/api/user/login",
@@ -39,7 +70,7 @@ const Login = () => {
       toast.success("Login successful...");
     } catch (err) {
       console.log(err);
-      toast.error("Login failed " + err.message);
+      toast.error("Login failed...");
     }
   };
   return (
@@ -74,6 +105,31 @@ const Login = () => {
           >
             Login
           </button>
+
+          <button
+            type="submit"
+            className="w-[75%] h-10 bg-blue-700 text-white rounded-lg m-5 hover:bg-blue-600 curser-pointer
+             focus:bg-blue-800 active:bg-blue-900 flex items-center justify-center"
+            onClick={loginWithGoogle}
+          >
+            <GrGoogle className="mr-[10px]"/>
+            Login with Google
+          </button>
+
+          {/* <GoogleLogin
+            onSuccess={(credentialResponse) => {
+              axios.post(
+                `${import.meta.env.VITE_BACKEND_URL}/api/user/google`,
+                {
+                  token: credentialResponse.credential,
+                }
+              );
+              console.log(credentialResponse);
+            }}
+            onError={() => {
+              console.log("Login Failed");
+            }}
+          /> */}
         </div>
       </div>
     </div>

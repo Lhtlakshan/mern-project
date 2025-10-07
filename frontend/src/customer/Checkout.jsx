@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import removeFromCart, { addToCart, getCart } from "../util/Cart";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const Checkout = () => {
   const location = useLocation();
@@ -15,8 +16,10 @@ const Checkout = () => {
   const user = localStorage.getItem("user");
 
   useEffect(() => {
-    if (productFromState) {
-      setCart([productFromState]); // single product Checkout
+    if (productFromState != null) {
+      setCart([{ ...productFromState, quantity: 1 }]); // single product Checkout
+      console.log(cart);
+      
     } else {
       setCart(getCart()); // fallback to cart
     }
@@ -68,7 +71,7 @@ const Checkout = () => {
       );
 
       console.log("Order response:", res.data);
-      alert("Order placed successfully!");
+      toast.success("Order placed successfull.")
       setCart([]);
     } catch (err) {
       console.log(err);
@@ -78,7 +81,9 @@ const Checkout = () => {
   return (
     <div className="max-w-5xl mx-auto p-4 mt-[80px]">
       <h1 className="text-xl font-semibold text-slate-900 mb-6">Checkout</h1>
-
+{
+  console.log(cart)
+}
       {cart.length === 0 ? (
         <p className="text-center text-slate-500">Your cart is empty</p>
       ) : (
@@ -97,7 +102,8 @@ const Checkout = () => {
             <div className="flex flex-col gap-2">
               <h3 className="font-semibold">{cartItem.name}</h3>
               <p>Price: LKR {cartItem.price}</p>
-              <p>Total: LKR {cartItem.price * (cartItem.quantity || 1)}</p>
+              <p>Total: LKR {cartItem.price * (cartItem.quantity)}</p>
+              
             </div>
             <div className="ml-auto flex flex-col justify-between">
               <button

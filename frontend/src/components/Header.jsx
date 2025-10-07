@@ -16,8 +16,6 @@ const Header = () => {
   return (
     <header className="fixed top-0 left-0 w-full shadow-md py-4 px-4 sm:px-10 bg-white min-h-[70px] tracking-wide z-50">
       <div className="flex flex-wrap items-center justify-between gap-5 w-full">
-       
-
         {/* Navigation */}
         <ul className="lg:flex gap-x-8 hidden">
           <li>
@@ -52,6 +50,16 @@ const Header = () => {
               Cart
             </Link>
           </li>
+          {token && (
+            <li>
+              <Link
+                className="hover:text-blue-700 text-slate-900 font-medium text-[15px]"
+                to="/orders"
+              >
+                Orders
+              </Link>
+            </li>
+          )}
         </ul>
 
         {/* Right side - Buttons */}
